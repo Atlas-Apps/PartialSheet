@@ -79,7 +79,12 @@ struct PartialSheet: ViewModifier {
         case .iphone:
             switch iPhoneStyle.background {
             case .solid(let color): Rectangle().fill(color)
-            case .blur(let effect): Rectangle().fill(effect)
+            case .blur(let fallbackColor):
+                if #available(iOS 15, *) {
+                    Rectangle().fill(Material.regular)
+                } else {
+                    Rectangle().fill(fallbackColor)
+                }
             }
         default:
             Rectangle().fill(iPadMacStyle.backgroundColor)
